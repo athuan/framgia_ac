@@ -33,4 +33,43 @@ module ApplicationHelper
       sheet.row(i).hidden = true
     end
   end
+
+  def get_value_cell sheet, row, column
+    sheet.row(row)[column]
+  end
+
+  def get_column_values sheet, column
+    values = []
+    (Settings.from1..(Settings.from1 + Settings.number1 - 1)).each do |i|
+      values.push(sheet.row(i)[column])
+    end
+    (Settings.from2..(Settings.from2 + Settings.number2 - 1)).each do |i|
+      values.push(sheet.row(i)[column])
+    end
+    values
+  end
+
+  def get_users sheet
+    users =[]
+    (Settings.from1..(Settings.from1 + Settings.number1 - 1)).each do |i|
+      users.push(sheet.row(i))
+    end
+    (Settings.from2..(Settings.from2 + Settings.number2 - 1)).each do |i|
+      users.push(sheet.row(i))
+    end
+    users
+  end
+
+  def get_order sheet, uid
+    (Settings.from1..(Settings.from1 + Settings.number1 - 1)).each do |i|
+      if sheet.row(i)[Settings.uid_column] == uid
+        return i
+      end
+    end
+    (Settings.from2..(Settings.from2 + Settings.number2 - 1)).each do |i|
+      if sheet.row(i)[Settings.uid_column] == uid
+        return i
+      end
+    end
+  end
 end

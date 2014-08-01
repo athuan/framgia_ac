@@ -1,0 +1,36 @@
+
+<h1> All users </h1>
+
+<div class="row">
+  <div class="span12 offset3">
+    
+    <%= link_to "Send all ", excels_sent_all_path, class: "btn btn-large btn-primary", style: "display: none;"%>
+    <table class="table table-bordered" id="examination-list">
+      <thead>
+        <tr>
+          <th>uid</th>
+          <th>name</th>
+          <th>email</th>
+          <th>attachment</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% (0..@uids.count-1).each do |i| %>
+          <tr>
+            <td><%= @uids[i] %></td>
+            <td><%= @names[i] %></td>
+            <td><%= @users.all.find_by(uid: @uids[i]).email %></td> 
+            <td><%= link_to "#{@uids[i]}", excels_download_path(uid: @uids[i]) %></td>
+            <% if SentUser.find_by(uid: @uids[i]).sent %>
+              <td><h4> Sent </h4> </td>
+            <% else %>
+              <td><%= link_to "Send ", excels_sent_email_path(uid: @uids[i]), class: "btn btn-large btn-primary"%></td>
+            <% end %>
+          </tr>
+        <% end %>
+        
+      </tbody>
+    </table>
+  </div>
+</div>
