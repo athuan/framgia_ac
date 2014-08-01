@@ -1,17 +1,17 @@
 module ApplicationHelper
 
-  def export book, sheet, from1, to1, from2, to2, uid, uid_column
-    remove_row sheet, from1, to1, from2, to2, uid, uid_column
-    book.write "app/assets/excels/#{uid}.xls"
+  def export book, sheet, from1, to1, from2, to2, display_name, display_name_column
+    remove_row sheet, from1, to1, from2, to2, display_name, display_name_column
+    book.write "app/assets/excels/#{display_name}.xls"
   end
 
-  def remove_row sheet, from1, to1, from2, to2, uid, uid_column
+  def remove_row sheet, from1, to1, from2, to2, display_name, display_name_column
     number_column = sheet.column_count
     number_row = sheet.row_count
     
     sheet.row(number_row).insert 0, nil
     (from1..to1).each do |i|
-      if sheet.row(i)[uid_column] != uid
+      if sheet.row(i)[display_name_column] != display_name
         sheet.row(i).hidden = true
       else
         ((to1 + 1)..(from2 - 1)).each do |j|
@@ -20,7 +20,7 @@ module ApplicationHelper
       end
     end
     (from2..to2).each do |i|
-      if sheet.row(i)[uid_column] != uid
+      if sheet.row(i)[display_name_column] != display_name
         sheet.row(i).hidden = true
       else
         sheet.row(from1 - 1).hidden = true
@@ -60,14 +60,14 @@ module ApplicationHelper
     users
   end
 
-  def get_order sheet, uid
+  def get_order sheet, display_name
     (Settings.from1..(Settings.from1 + Settings.number1 - 1)).each do |i|
-      if sheet.row(i)[Settings.uid_column] == uid
+      if sheet.row(i)[Settings.display_name_column] == display_name
         return i
       end
     end
     (Settings.from2..(Settings.from2 + Settings.number2 - 1)).each do |i|
-      if sheet.row(i)[Settings.uid_column] == uid
+      if sheet.row(i)[Settings.display_name_column] == display_name
         return i
       end
     end

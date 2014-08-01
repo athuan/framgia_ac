@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20140801084853) do
   end
 
   create_table "users", force: true do |t|
-    t.string   "name"
+    t.string   "display_name"
     t.string   "email"
     t.string   "uid"
     t.datetime "created_at"

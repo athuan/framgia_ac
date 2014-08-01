@@ -13,19 +13,19 @@ class ExcelsController < ApplicationController
       ((Settings.from1)..to1).each do |index|
         book = Spreadsheet.open(params[:file].path)
         sheet = book.worksheet 0
-        uid = sheet.row(index)[Settings.uid_column]
-        if !uid.nil?
+        display_name = sheet.row(index)[Settings.display_name_column]
+        if !display_name.nil?
           export(book, sheet, Settings.from1, to1, Settings.from2, to2,
-            uid, Settings.uid_column) 
+            display_name, Settings.display_name_column) 
         end
       end
       ((Settings.from2)..to2).each do |index|
         book = Spreadsheet.open(params[:file].path)
         sheet = book.worksheet 0
-        uid = sheet.row(index)[Settings.uid_column]
-        if !uid.nil?
+        display_name = sheet.row(index)[Settings.display_name_column]
+        if !display_name.nil?
           export(book, sheet, Settings.from1, to1, Settings.from2, to2,
-            uid, Settings.uid_column)
+            display_name, Settings.display_name_column)
         end
       end
       flash[:success] = "imported!"
@@ -41,13 +41,15 @@ class ExcelsController < ApplicationController
 
   def list_user
     @users = User.all
-    @uids =[]
+    #@uids =[]
     @names = []
     @users.each do |user|
-      book = Spreadsheet.open("app/assets/excels/#{user.uid}.xls")
-      sheet = book.worksheet 0
-      @uids.push(sheet.row(get_order(sheet, user.uid))[Settings.uid_column])
-      @names.push(sheet.row(get_order(sheet, user.uid))[Settings.name_column])
+      if !user.email.include? "deactivated"
+        book = Spreadsheet.open("app/assets/excels/#{user.display_name}.xls")
+        sheet = book.worksheet 0
+        #@uids.push(sheet.row(get_order(sheet, user.uid))[Settings.uid_column])
+        @names.push(sheet.row(get_order(sheet, user.display_name))[Settings.display_name_column])
+      end
     end
   end
 
@@ -68,8 +70,8 @@ class ExcelsController < ApplicationController
   end
 
   def download
-    uid = params[:uid]
-    send_file "app/assets/excels/#{uid}.xls"
+    display_name = params[:display_name]
+    send_file "app/assets/excels/#{display_name}.xls"
   end
 end
 
