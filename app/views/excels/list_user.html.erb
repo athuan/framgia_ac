@@ -9,23 +9,24 @@
       <thead>
         <tr>
           <th>uid</th>
-          <th>name</th>
+          <th>display_name</th>
           <th>email</th>
           <th>attachment</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        <% (0..@uids.count-1).each do |i| %>
+        <% (0..@names.count-1).each do |i| %>
           <tr>
-            <td><%= @uids[i] %></td>
+            <td><%= @users.all.find_by(display_name: @names[i]).uid %></td>
             <td><%= @names[i] %></td>
-            <td><%= @users.all.find_by(uid: @uids[i]).email %></td> 
-            <td><%= link_to "#{@uids[i]}", excels_download_path(uid: @uids[i]) %></td>
-            <% if SentUser.find_by(uid: @uids[i]).sent %>
+            <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
+            <td><%= link_to "#{@names[i]}", excels_download_path(display_name: @names[i]) %></td>
+            <% if SentUser.find_by(uid: @users.all.find_by(display_name: @names[i]).uid).sent %>
               <td><h4> Sent </h4> </td>
             <% else %>
-              <td><%= link_to "Send ", excels_sent_email_path(uid: @uids[i]), class: "btn btn-large btn-primary"%></td>
+              <td><%= link_to "Send ", 
+                excels_sent_email_path(uid: @users.all.find_by(display_name: @names[i]).uid), class: "btn btn-large btn-primary"%></td>
             <% end %>
           </tr>
         <% end %>
