@@ -8,6 +8,7 @@
     <table class="table table-bordered" id="examination-list">
       <thead>
         <tr>
+          <th></th>
           <th>uid</th>
           <th>display_name</th>
           <th>email</th>
@@ -18,10 +19,12 @@
       <tbody>
         <% (0..@names.count-1).each do |i| %>
           <tr>
+            <td><%= i+1 %></td>
             <td><%= @users.all.find_by(display_name: @names[i]).uid %></td>
             <td><%= @names[i] %></td>
             <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
-            <td><%= link_to "#{@users.all.find_by(display_name: @names[i]).uid}", excels_download_path(uid: @users.all.find_by(display_name: @names[i]).uid) %></td>
+            <td><a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%=@users.all.find_by(display_name: @names[i]).uid%>')" %>
+            <%= "#{@users.all.find_by(display_name: @names[i]).uid}" %></a></td>
             <% if SentUser.find_by(uid: @users.all.find_by(display_name: @names[i]).uid).sent %>
               <td><h4> Sent </h4> </td>
             <% else %>
@@ -29,6 +32,18 @@
                 excels_sent_email_path(uid: @users.all.find_by(display_name: @names[i]).uid), class: "btn btn-large btn-primary"%></td>
             <% end %>
           </tr>
+        <% end %>
+        <% if !@users_not_in_file.blank? %>
+            <% (0..@users_not_in_file.count-1).each do |i| %>
+              <tr>
+                <td><%= @names.count+i+1 %></td>
+                <td></td>
+                <td></td>
+                <td><%= @users_not_in_file[i] %></td>
+                <td></td>
+                <td></td>
+              </tr>
+            <% end %>
         <% end %>
         
       </tbody>

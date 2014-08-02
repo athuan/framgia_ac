@@ -16,7 +16,8 @@ class ExcelsController < ApplicationController
         (0..@sheet1.column_count-1).each do |i|
           t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
         end
-        if !@sheet1.row(index)[Settings.display_name_column].nil?
+        display_name = @sheet1.row(index)[Settings.display_name_column]
+        if !User.find_user(display_name).blank? 
           uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
           t_book.write "app/assets/excels/#{uid}.xls"
         end
@@ -27,7 +28,8 @@ class ExcelsController < ApplicationController
         (0..@sheet1.column_count-1).each do |i|
           t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
         end
-        if !@sheet1.row(index)[Settings.display_name_column].nil?
+        display_name = @sheet1.row(index)[Settings.display_name_column]
+        if !User.find_user(display_name).blank?
           uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
           t_book.write "app/assets/excels/#{uid}.xls"
         end
@@ -47,11 +49,16 @@ class ExcelsController < ApplicationController
   def list_user
     @users = User.all
     @names = []
+    @users_not_in_file =[]
     @users.each do |user|
-      if !(user.email.include? "deactivated") && File.exists?("app/assets/excels/#{user.uid}.xls")
-        book = Spreadsheet.open("app/assets/excels/#{user.uid}.xls")
-        sheet = book.worksheet 0
-        @names.push(sheet.row(Settings.from1)[Settings.display_name_column])
+      if !(user.email.include? "deactivated")
+        if File.exists?("app/assets/excels/#{user.uid}.xls")
+          book = Spreadsheet.open("app/assets/excels/#{user.uid}.xls")
+          sheet = book.worksheet 0
+          @names.push(sheet.row(Settings.from1)[Settings.display_name_column])
+        else
+          @users_not_in_file.push(user.email)
+        end
       end
     end
   end
@@ -75,6 +82,7 @@ class ExcelsController < ApplicationController
   def download
     uid = params[:uid]
     send_file "app/assets/excels/#{uid}.xls"
+    #redirect_to excels_list_user_path
   end
 end
 
