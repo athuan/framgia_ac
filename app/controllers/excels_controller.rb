@@ -5,6 +5,7 @@ class ExcelsController < ApplicationController
 
   def import
     if params[:file].present?
+      FileUtils.rm_rf(Dir.glob("app/assets/excels/*"))
       @book = Spreadsheet.open(params[:file].path)
       @sheet1 = @book.worksheet 0
       number_row = @sheet1.row_count
@@ -16,9 +17,10 @@ class ExcelsController < ApplicationController
         (0..@sheet1.column_count-1).each do |i|
           t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
         end
-        display_name = @sheet1.row(index)[Settings.display_name_column]
-        if !User.find_user(display_name).blank? 
-          uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
+        #display_name = @sheet1.row(index)[Settings.display_name_column]
+        uid = @sheet1.row(index)[Settings.uid_column]
+        if !uid.nil? 
+          #uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
           t_book.write "app/assets/excels/#{uid}.xls"
         end
       end
@@ -28,9 +30,10 @@ class ExcelsController < ApplicationController
         (0..@sheet1.column_count-1).each do |i|
           t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
         end
-        display_name = @sheet1.row(index)[Settings.display_name_column]
-        if !User.find_user(display_name).blank?
-          uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
+        #display_name = @sheet1.row(index)[Settings.display_name_column]
+        uid = @sheet1.row(index)[Settings.uid_column]
+        if !uid.nil?
+          #uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
           t_book.write "app/assets/excels/#{uid}.xls"
         end
       end
@@ -49,6 +52,7 @@ class ExcelsController < ApplicationController
   def list_user
     @users = User.all
     @names = []
+    @uids = []
     @users_not_in_file =[]
     @users.each do |user|
       if !(user.email.include? "deactivated")
@@ -56,6 +60,7 @@ class ExcelsController < ApplicationController
           book = Spreadsheet.open("app/assets/excels/#{user.uid}.xls")
           sheet = book.worksheet 0
           @names.push(sheet.row(Settings.from1)[Settings.display_name_column])
+          @uids.push(sheet.row(Settings.from1)[Settings.uid_column])
         else
           @users_not_in_file.push(user.email)
         end

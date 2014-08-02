@@ -20,11 +20,11 @@
         <% (0..@names.count-1).each do |i| %>
           <tr>
             <td><%= i+1 %></td>
-            <td><%= @users.all.find_by(display_name: @names[i]).uid %></td>
+            <td><%= @uids[i] %></td>
             <td><%= @names[i] %></td>
             <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
-            <td><a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%=@users.all.find_by(display_name: @names[i]).uid%>')" %>
-            <%= "#{@users.all.find_by(display_name: @names[i]).uid}" %></a></td>
+            <td><a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%=@uids[i]%>')" %>
+            <%= "#{@uids[i]}" %></a></td>
             <% if SentUser.find_by(uid: @users.all.find_by(display_name: @names[i]).uid).sent %>
               <td><h4> Sent </h4> </td>
             <% else %>
