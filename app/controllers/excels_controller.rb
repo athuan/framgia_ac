@@ -11,28 +11,32 @@ class ExcelsController < ApplicationController
       to1 = Settings.from1 + Settings.number1 - 1
       to2 = Settings.from2 + Settings.number2 - 1
       ((Settings.from1)..to1).each do |index|
-        book = Spreadsheet.open(params[:file].path)
-        sheet = book.worksheet 0
-        display_name = sheet.row(index)[Settings.display_name_column]
-        if !display_name.nil?
-          export(book, sheet, Settings.from1, to1, Settings.from2, to2,
-            display_name, Settings.display_name_column) 
+        t_book = Spreadsheet.open ("app/assets/templates/template.xls")
+        t_sheet = t_book.worksheet 0
+        (0..@sheet1.column_count-1).each do |i|
+          t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
+        end
+        if !@sheet1.row(index)[Settings.display_name_column].nil?
+          uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
+          t_book.write "app/assets/excels/#{uid}.xls"
         end
       end
       ((Settings.from2)..to2).each do |index|
-        book = Spreadsheet.open(params[:file].path)
-        sheet = book.worksheet 0
-        display_name = sheet.row(index)[Settings.display_name_column]
-        if !display_name.nil?
-          export(book, sheet, Settings.from1, to1, Settings.from2, to2,
-            display_name, Settings.display_name_column)
+        t_book = Spreadsheet.open ("app/assets/templates/template.xls")
+        t_sheet = t_book.worksheet 0
+        (0..@sheet1.column_count-1).each do |i|
+          t_sheet.row(Settings.from1).insert i, @sheet1.row(index)[i]
+        end
+        if !@sheet1.row(index)[Settings.display_name_column].nil?
+          uid = User.find_by(display_name: @sheet1.row(index)[Settings.display_name_column]).uid
+          t_book.write "app/assets/excels/#{uid}.xls"
         end
       end
       flash[:success] = "imported!"
     else
       flash[:error] = "Chosen file to import!"
     end
-    
+
     SentUser.all.delete_all
     User.all.each do |user|
       sent_user = SentUser.create(uid: user.uid, sent: false, note: params[:file].original_filename)

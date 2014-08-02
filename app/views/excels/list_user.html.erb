@@ -21,7 +21,7 @@
             <td><%= @users.all.find_by(display_name: @names[i]).uid %></td>
             <td><%= @names[i] %></td>
             <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
-            <td><%= link_to "#{@names[i]}", excels_download_path(uid: @users.all.find_by(display_name: @names[i]).uid) %></td>
+            <td><%= link_to "#{@users.all.find_by(display_name: @names[i]).uid}", excels_download_path(uid: @users.all.find_by(display_name: @names[i]).uid) %></td>
             <% if SentUser.find_by(uid: @users.all.find_by(display_name: @names[i]).uid).sent %>
               <td><h4> Sent </h4> </td>
             <% else %>

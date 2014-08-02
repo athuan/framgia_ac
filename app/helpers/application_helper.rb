@@ -75,11 +75,15 @@ module ApplicationHelper
     end
   end
 
-  def hash_users
-    users_hash = Hash.new
+  def arr_users
+    users = []
+    i = 0
     User.all.each do |user|
-      users_hash[user.display_name] = user.uid
+      users[i] = user.display_name
+      users[i+1] = user.uid
+      i += 2
     end
-    users_hash
+    users
   end
+
 end
