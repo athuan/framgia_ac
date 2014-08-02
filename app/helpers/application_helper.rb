@@ -2,6 +2,8 @@ module ApplicationHelper
 
   def export book, sheet, from1, to1, from2, to2, display_name, display_name_column
     remove_row sheet, from1, to1, from2, to2, display_name, display_name_column
+    dir = "app/assets/excels"
+    Dir.mkdir(dir) unless File.exists?(dir)
     book.write "app/assets/excels/#{display_name}.xls"
   end
 
@@ -71,5 +73,13 @@ module ApplicationHelper
         return i
       end
     end
+  end
+
+  def hash_users
+    users_hash = Hash.new
+    User.all.each do |user|
+      users_hash[user.display_name] = user.uid
+    end
+    users_hash
   end
 end

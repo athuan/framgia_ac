@@ -32,6 +32,7 @@ class ExcelsController < ApplicationController
     else
       flash[:error] = "Chosen file to import!"
     end
+    
     SentUser.all.delete_all
     User.all.each do |user|
       sent_user = SentUser.create(uid: user.uid, sent: false, note: params[:file].original_filename)
@@ -41,14 +42,12 @@ class ExcelsController < ApplicationController
 
   def list_user
     @users = User.all
-    #@uids =[]
     @names = []
     @users.each do |user|
-      if !user.email.include? "deactivated"
-        book = Spreadsheet.open("app/assets/excels/#{user.display_name}.xls")
+      if !(user.email.include? "deactivated") && File.exists?("app/assets/excels/#{user.uid}.xls")
+        book = Spreadsheet.open("app/assets/excels/#{user.uid}.xls")
         sheet = book.worksheet 0
-        #@uids.push(sheet.row(get_order(sheet, user.uid))[Settings.uid_column])
-        @names.push(sheet.row(get_order(sheet, user.display_name))[Settings.display_name_column])
+        @names.push(sheet.row(Settings.from1)[Settings.display_name_column])
       end
     end
   end
@@ -70,8 +69,8 @@ class ExcelsController < ApplicationController
   end
 
   def download
-    display_name = params[:display_name]
-    send_file "app/assets/excels/#{display_name}.xls"
+    uid = params[:uid]
+    send_file "app/assets/excels/#{uid}.xls"
   end
 end
 
