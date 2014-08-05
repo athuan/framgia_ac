@@ -25,12 +25,11 @@
             <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
             <td><a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%=@uids[i]%>')" %>
             <%= "#{@uids[i]}" %></a></td>
-            <% if SentUser.find_by(uid: @users.all.find_by(display_name: @names[i]).uid).sent %>
-              <td><h4> Sent </h4> </td>
-            <% else %>
-              <td><%= link_to "Send ", 
-                excels_sent_email_path(uid: @users.all.find_by(display_name: @names[i]).uid), class: "btn btn-large btn-primary"%></td>
-            <% end %>
+            <td>
+              <div id="<%= @uids[i] %>">
+                <%= link_to "Send ", excels_sent_email_path(uid: @uids[i]), remote: true, class: "btn btn-large btn-primary"%>
+              </div>
+            </td>
           </tr>
         <% end %>
         <% if !@users_not_in_file.blank? %>
