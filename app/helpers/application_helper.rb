@@ -135,7 +135,7 @@ module ApplicationHelper
       t_book = Spreadsheet.open ("app/assets/templates/template.xls")
       t_sheet = t_book.worksheet 0
       (0..sheet.column_count - 1).each do |i|
-        t_sheet.row(from - 1).insert i, get_cell_value(sheet, index, i)
+        t_sheet.row(Settings.template_start).insert i, get_cell_value(sheet, index, i)
       end
       uid = sheet.row(index)[Settings.uid_column]
       write t_book, "app/assets/excels/#{uid}.xls"
