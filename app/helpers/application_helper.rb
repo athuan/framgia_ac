@@ -86,4 +86,80 @@ module ApplicationHelper
     users
   end
 
+  def load_metadata
+    data = []
+    if File.exists?(Settings.excel_files + '/source.xls')
+      book = Spreadsheet.open(Settings.excel_files + '/source.xls')
+      sheet = book.worksheet 1
+      data = load_data sheet, Settings.from1, Settings.number1
+      data = data + load_data(sheet, Settings.from2, Settings.number2)
+    end
+    data
+  end
+
+  def import_xls file
+    FileUtils.rm_rf(Dir.glob(Settings.excel_files + "/*"))
+    File.open(Settings.excel_files + '/source.xls', 'wb') do |f|
+      f.write(file.read)
+    end
+    book = Spreadsheet.open(file.path)
+    sheet1 = book.worksheet 1
+    number_row = sheet1.row_count
+    separate_file sheet1, Settings.from1, Settings.number1
+    separate_file sheet1, Settings.from2, Settings.number2
+  end
+
+  def write workbook, url
+    workbook.write url
+    # File.open(url, "wb+") do |fh|
+    #   write_workbook workbook, fh
+    # end
+  end
+
+  private
+  def write_workbook workbook, io
+    reader = workbook.io
+    unless io == reader
+      reader.rewind
+      data = reader.read
+      io.rewind
+      io.write data
+    end
+  end
+
+  def separate_file sheet, from, number
+    to = from + number - 1
+    (from..to).each do |index|
+      t_book = Spreadsheet.open ("app/assets/templates/template.xls")
+      t_sheet = t_book.worksheet 0
+      (0..sheet.column_count - 1).each do |i|
+        t_sheet.row(from - 1).insert i, get_cell_value(sheet, index, i)
+      end
+      uid = sheet.row(index)[Settings.uid_column]
+      write t_book, "app/assets/excels/#{uid}.xls"
+    end
+  end
+
+  def load_data sheet, from, number
+    data = Array.new
+    to = from + number - 1
+    (from..to).each do |index|
+      uid = get_cell_value(sheet, index, Settings.uid_column)
+      logger.info uid.to_s
+      name = get_cell_value(sheet, index, Settings.display_name_column)
+      unless (uid.nil? || uid.empty?)
+        data << [uid, name]
+      end
+    end
+    data
+  end
+
+  def get_cell_value sheet, row, col
+    if sheet.row(row)[col].is_a? Spreadsheet::Formula
+      return sheet.row(row)[col].value
+    else
+      sheet.row(row)[col]
+    end
+  end
+
 end

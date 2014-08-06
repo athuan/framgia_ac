@@ -3,6 +3,7 @@ display_name_column: 2
 start: 8
 from1: 9
 number1: 12
-from2: 24
-number2: 136
-end: 168
+from2: 23
+number2: 142
+end: 167
+excel_files: /home/chuanhtuan/rails_projects/framgia_ac/app/assets/excels

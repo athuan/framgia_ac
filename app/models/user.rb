@@ -7,4 +7,8 @@ class User < ActiveRecord::Base
   scope :find_uid, ->(uid) do
   	where(uid: uid)
   end
+
+  scope :actives, -> do
+  	where("email NOT LIKE '__deactivated__;%'")
+  end
 end

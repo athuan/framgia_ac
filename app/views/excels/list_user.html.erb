@@ -17,34 +17,34 @@
         </tr>
       </thead>
       <tbody>
-        <% (0..@names.count-1).each do |i| %>
+        <% @names.each_with_index do |item, index| %>
           <tr>
-            <td><%= i+1 %></td>
-            <td><%= @uids[i] %></td>
-            <td><%= @names[i] %></td>
-            <td><%= @users.all.find_by(display_name: @names[i]).email %></td> 
-            <td><a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%=@uids[i]%>')" %>
-            <%= "#{@uids[i]}" %></a></td>
+            <% 
+            logger.info "-------------" + index.to_s
+            user = User.find_by_uid(item[0])
+            user = nil if user.nil? || user.email.include?("deactivated")
+            uid = item[0]
+            name = item[1]
+            %>
+            <td><%= index + 1 %></td>
+            <td><%= uid %></td>
+            <td><%= name %></td>
+            <td><%= user.email unless user.nil? %></td>
+            <% if !user.nil? %>
             <td>
-              <div id="<%= @uids[i] %>">
-                <%= link_to "Send ", excels_sent_email_path(uid: @uids[i]), remote: true, class: "btn btn-large btn-primary"%>
+              <a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%= uid %>')"><%= uid %></a>
+            </td>
+            <td>
+              <div id="<%= uid %>">
+                <%= link_to "Send ", excels_sent_email_path(uid: uid), remote: true, class: "btn btn-large btn-primary"%>
               </div>
             </td>
+            <% else %>
+            <td></td>
+            <td></td>
+            <% end %>
           </tr>
         <% end %>
-        <% if !@users_not_in_file.blank? %>
-            <% (0..@users_not_in_file.count-1).each do |i| %>
-              <tr>
-                <td><%= @names.count+i+1 %></td>
-                <td></td>
-                <td></td>
-                <td><%= @users_not_in_file[i] %></td>
-                <td></td>
-                <td></td>
-              </tr>
-            <% end %>
-        <% end %>
-        
       </tbody>
     </table>
   </div>
