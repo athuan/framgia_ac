@@ -6,4 +6,5 @@ number1: 12
 from2: 23
 number2: 142
 end: 167
+template_start: 8
 excel_files: /home/thuannm/rails_projects/framgia_ac/app/assets/excels
