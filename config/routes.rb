@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   match "excels/sent_email", to: "excels#sent_email", via: :get
   match "excels/sent_all", to: "excels#sent_all", via: :get
   match "excels/download", to: "excels#download", via: :get
+  match "excels/finish", to: "excels#finish", via: :get
 end

@@ -1,10 +1,3 @@
-GIT
-  remote: git@github.com:zdavatz/spreadsheet.git
-  revision: 47f352914b37e9710657b4377bddad6918798596
-  specs:
-    spreadsheet (0.9.7)
-      ruby-ole
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -121,6 +114,8 @@ GEM
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
     slop (3.5.0)
+    spreadsheet (0.9.7)
+      ruby-ole (>= 1.0)
     spring (1.1.3)
     sprockets (2.11.0)
       hike (~> 1.2)
@@ -164,7 +159,7 @@ DEPENDENCIES
   rails_config
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
-  spreadsheet!
+  spreadsheet
   spring
   sqlite3
   turbolinks

@@ -98,6 +98,8 @@ module ApplicationHelper
   end
 
   def import_xls file
+    dir = "app/assets/excels"
+    Dir.mkdir(dir) unless File.exists?(dir)
     FileUtils.rm_rf(Dir.glob(Settings.excel_files + "/*"))
     File.open(Settings.excel_files + '/source.xls', 'wb') do |f|
       f.write(file.read)
