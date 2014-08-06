@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.0.0"
 
-gem "spreadsheet", :git => "git@github.com:zdavatz/spreadsheet.git"
+gem "spreadsheet"
 #gem "nulogy-spreadsheet"
 gem "mail"
 gem 'delayed_job_active_record'

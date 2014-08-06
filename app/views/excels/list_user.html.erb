@@ -20,7 +20,6 @@
         <% @names.each_with_index do |item, index| %>
           <tr>
             <% 
-            logger.info "-------------" + index.to_s
             user = User.find_by_uid(item[0])
             user = nil if user.nil? || user.email.include?("deactivated")
             uid = item[0]
@@ -47,5 +46,6 @@
         <% end %>
       </tbody>
     </table>
+    <%= link_to "Finish", excels_finish_path, class: "btn btn-large btn-primary"%>
   </div>
 </div>

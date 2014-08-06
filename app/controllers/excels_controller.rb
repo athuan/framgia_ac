@@ -26,11 +26,14 @@ class ExcelsController < ApplicationController
   end
 
   def sent_email
-    uid = params[:uid]
-    user = User.find_by(uid: uid)
+    @uid = params[:uid]
+    user = User.find_by(uid: @uid)
     Notifier.delay.sent_mail(user)
-    SentUser.find_by(uid: uid).update_attributes(sent: true)
-    redirect_to :back
+    SentUser.find_by(uid: @uid).update_attributes(sent: true)
+    respond_to do |format|
+      format.html { redirect_to excels_list_user_path }
+      format.js
+    end
   end
 
   def sent_all
@@ -45,6 +48,11 @@ class ExcelsController < ApplicationController
     uid = params[:uid]
     send_file "app/assets/excels/#{uid}.xls"
     #redirect_to excels_list_user_path
+  end
+
+  def finish
+    FileUtils.rm_rf(Dir.glob(Settings.excel_files + "/*"))
+    redirect_to root_path
   end
 end
 
