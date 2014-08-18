@@ -3,7 +3,9 @@
     </br>
     <div class="row">
       <%= form_tag excels_import_path, multipart: true do %>      
-        <%= file_field_tag :file %>
+        <div class="span6"><%= file_field_tag :file %></div>
+        <div class="span1.5"><%= select_month(Date.today) %></div>
+        <div class="span1.5"><%= select_year(Date.today) %></div>
         <%= submit_tag "Import", class: "btn btn-large btn-primary" %>
       <% end %>
     </div>
