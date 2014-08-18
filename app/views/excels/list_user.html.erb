@@ -35,7 +35,12 @@
             </td>
             <td>
               <div id="<%= uid %>">
-                <%= link_to "Send ", excels_sent_email_path(uid: uid), remote: true, class: "btn btn-large btn-primary"%>
+                <% if @sent_users.find_by(uid: uid).sent %>
+                  <%= render "excels/sent" %>
+                <% else %>
+                  <%= link_to "Send ", excels_sent_email_path(uid: uid, salary_report_id: @salary_report_id),
+                    remote: true, class: "btn btn-large btn-primary"%>
+                <% end %>
               </div>
             </td>
             <% else %>
