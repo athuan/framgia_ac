@@ -3,8 +3,6 @@
 
 <div class="row">
   <div class="span12 offset0">
-    
-    <%= link_to "Send all ", excels_sent_all_path, class: "btn btn-large btn-primary", style: "display: none;"%>
     <table class="table table-bordered" id="examination-list">
       <thead>
         <tr>
@@ -24,6 +22,7 @@
             user = nil if user.nil? || user.email.include?("deactivated")
             uid = item[0]
             name = item[1]
+            sent_user = @sent_users.find_by(uid: uid)
             %>
             <td><%= index + 1 %></td>
             <td><%= uid %></td>
@@ -31,15 +30,18 @@
             <td><%= user.email unless user.nil? %></td>
             <% if !user.nil? %>
             <td>
-              <a href="javascript: void(0)" onclick="$.fileDownload('/excels/download?uid=<%= uid %>')"><%= uid %></a>
+              <a href="javascript: void(0)" onclick="$.fileDownload('/send_emails/<%= sent_user.id %>.csv?uid=<%= uid %>')"><%= uid %></a>
             </td>
             <td>
               <div id="<%= uid %>">
-                <% if @sent_users.find_by(uid: uid).sent %>
-                  <%= render "excels/sent" %>
+                <% if sent_user.sent %>
+                  <%= render "send_emails/sent" %>
                 <% else %>
-                  <%= link_to "Send ", excels_sent_email_path(uid: uid, salary_report_id: @salary_report_id),
-                    remote: true, class: "btn btn-large btn-primary"%>
+                  <%= form_tag send_emails_path, :method => :post, remote: true do %>
+                    <%= hidden_field_tag :uid, uid %>
+                    <%= hidden_field_tag :salary_report_id, @salary_report.id %>
+                    <%= submit_tag "Send", class: "btn btn-large btn-primary"%>
+                  <% end %>
                 <% end %>
               </div>
             </td>
@@ -51,6 +53,8 @@
         <% end %>
       </tbody>
     </table>
-    <%= link_to "Finish", excels_finish_path, class: "btn btn-large btn-primary"%>
+    <%= form_tag "/salary_reports/#{@salary_report.id}", :method => :patch do %>
+      <%= submit_tag "Finish", class: "btn btn-large btn-primary"%>
+    <% end %>
   </div>
 </div>
