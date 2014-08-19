@@ -1,0 +1,16 @@
+<div class="center">
+  <h3>Program for sending Emails </h3>
+    </br>
+    <div class="row">
+      <%= form_for @salary_report, multipart: true do |f| %>      
+        <div class="span6"><%= f.file_field :file %></div>
+        <div class="span1.5"><%= f.select :month, 1..12 %></div>
+        <div class="span1.5">
+          <%= f.select :year, Date.today.year..5.year.from_now.year %>
+        </div>
+        <%= f.submit "Import", class: "btn btn-large btn-primary" %>
+      <% end %>
+    </div>
+</div>
+
+
