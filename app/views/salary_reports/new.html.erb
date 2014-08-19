@@ -1,3 +1,6 @@
+<head>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
 <div class="center">
   <h3>Program for sending Emails </h3>
     </br>
@@ -8,7 +11,8 @@
         <div class="span1.5">
           <%= f.select :year, Date.today.year..5.year.from_now.year %>
         </div>
-        <%= f.submit "Import", class: "btn btn-large btn-primary" %>
+        <%= f.button "Import", class: "btn btn-large btn-primary",
+          data: {disable_with: "<i class='fa fa-cog fa-spin'></i> Importing..."} %>
       <% end %>
     </div>
 </div>

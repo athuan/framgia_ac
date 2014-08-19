@@ -15,46 +15,67 @@
         </tr>
       </thead>
       <tbody>
-        <% @names.each_with_index do |item, index| %>
-          <tr>
-            <% 
-            user = User.find_by_uid(item[0])
-            user = nil if user.nil? || user.email.include?("deactivated")
-            uid = item[0]
-            name = item[1]
-            sent_user = @sent_users.find_by(uid: uid)
-            %>
-            <td><%= index + 1 %></td>
-            <td><%= uid %></td>
-            <td><%= name %></td>
-            <td><%= user.email unless user.nil? %></td>
-            <% if !user.nil? %>
-            <td>
-              <a href="javascript: void(0)" onclick="$.fileDownload('/send_emails/<%= sent_user.id %>.csv?uid=<%= uid %>')"><%= uid %></a>
-            </td>
-            <td>
-              <div id="<%= uid %>">
-                <% if sent_user.sent %>
-                  <%= render "send_emails/sent" %>
-                <% else %>
-                  <%= form_tag send_emails_path, :method => :post, remote: true do %>
-                    <%= hidden_field_tag :uid, uid %>
-                    <%= hidden_field_tag :salary_report_id, @salary_report.id %>
-                    <%= submit_tag "Send", class: "btn btn-large btn-primary"%>
+        <% if !@salary_report.finish %>
+          <% @names.each_with_index do |item, index| %>
+            <tr>
+              <% 
+              user = User.find_by_uid(item[0])
+              user = nil if user.nil? || user.email.include?("deactivated")
+              uid = item[0]
+              name = item[1]
+              sent_user = @sent_users.find_by(uid: uid)
+              %>
+              <td><%= index + 1 %></td>
+              <td><%= uid %></td>
+              <td><%= name %></td>
+              <td><%= user.email unless user.nil? %></td>
+              <% if !user.nil? %>
+              <td>
+                <a href="javascript: void(0)" onclick="$.fileDownload('/send_emails/<%= sent_user.id %>.csv?uid=<%= uid %>')"><%= uid %></a>
+              </td>
+              <td>
+                <div id="<%= uid %>">
+                  <% if sent_user.sent %>
+                    <%= render "send_emails/sent" %>
+                  <% else %>
+                    <%= form_tag send_emails_path, :method => :post, remote: true do %>
+                      <%= hidden_field_tag :uid, uid %>
+                      <%= hidden_field_tag :salary_report_id, @salary_report.id %>
+                      <%= submit_tag "Send", class: "btn btn-large btn-primary"%>
+                    <% end %>
                   <% end %>
+                </div>
+              </td>
+              <% else %>
+              <td></td>
+              <td></td>
+              <% end %>
+            </tr>
+          <% end %>
+        <% else %>
+          <% User.all.each_with_index do|user, index| %>
+            <tr>
+              <% if !user.email.include?("deactivated") %>
+                <td><%= index + 1 %></td>
+                <td><%= user.uid %></td>
+                <td><%= user.display_name %></td>
+                <td><%= user.email %></td>
+                <td></td>
+                <% if @sent_users.find_by(uid: user.uid).sent %>
+                  <td><h4> Sent </h4></td>
+                <% else %>
+                  <td><h4> Not sent </h4></td>
                 <% end %>
-              </div>
-            </td>
-            <% else %>
-            <td></td>
-            <td></td>
-            <% end %>
-          </tr>
+              <% end %>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
-    <%= form_tag "/salary_reports/#{@salary_report.id}", :method => :patch do %>
-      <%= submit_tag "Finish", class: "btn btn-large btn-primary"%>
+    <% if !@salary_report.finish %>
+      <%= form_tag "/salary_reports/#{@salary_report.id}", :method => :patch do %>
+        <%= submit_tag "Finish", class: "btn btn-large btn-primary"%>
+      <% end %>
     <% end %>
   </div>
 </div>
