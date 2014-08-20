@@ -34,17 +34,19 @@
                 <a href="javascript: void(0)" onclick="$.fileDownload('/send_emails/<%= sent_user.id %>.csv?uid=<%= uid %>')"><%= uid %></a>
               </td>
               <td>
-                <div id="<%= uid %>">
-                  <% if sent_user.sent %>
-                    <%= render "send_emails/sent" %>
-                  <% else %>
-                    <%= form_tag send_emails_path, :method => :post, remote: true do %>
-                      <%= hidden_field_tag :uid, uid %>
-                      <%= hidden_field_tag :salary_report_id, @salary_report.id %>
-                      <%= submit_tag "Send", class: "btn btn-large btn-primary"%>
+                
+                  <%= form_tag send_emails_path, :method => :post, remote: true do %>
+                    <%= hidden_field_tag :uid, uid %>
+                    <%= hidden_field_tag :salary_report_id, @salary_report.id %>
+                    <% if sent_user.sent %>
+                      <%= submit_tag "Resend", class: "btn btn-link"%>
+                    <% else %>
+                      <div id="<%= uid %>">
+                        <%= submit_tag "Send", class: "btn btn-large btn-primary"%>
+                      </div>
                     <% end %>
                   <% end %>
-                </div>
+               
               </td>
               <% else %>
               <td></td>
