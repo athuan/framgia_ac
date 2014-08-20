@@ -3,6 +3,7 @@ class CreateSalaryReports < ActiveRecord::Migration
     create_table :salary_reports do |t|
       t.string :month
       t.string :year
+      t.boolean :finish
 
       t.timestamps
     end

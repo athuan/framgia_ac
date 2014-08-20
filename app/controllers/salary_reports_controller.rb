@@ -9,6 +9,7 @@ class SalaryReportsController < ApplicationController
 
   def create
     @salary_report = SalaryReport.new salary_report_params
+    @salary_report.finish = false
     if params[:salary_report][:file].present?
       if @salary_report.save
         import_xls params[:salary_report][:file]
@@ -36,13 +37,15 @@ class SalaryReportsController < ApplicationController
   end
 
   def update
+    @salary_report = SalaryReport.find params[:id]
+    @salary_report.update_attributes(finish: true)
     FileUtils.rm_rf(Dir.glob(Settings.excel_files + "/*"))
     redirect_to root_path
   end
 
   private
     def salary_report_params
-      params.require(:salary_report).permit(:month, :year)
+      params.require(:salary_report).permit(:month, :year, :finish)
     end
 end
 

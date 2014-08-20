@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20140818013539) do
   create_table "salary_reports", force: true do |t|
     t.string   "month"
     t.string   "year"
+    t.boolean  "finish"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
