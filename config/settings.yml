@@ -7,4 +7,9 @@ from2: 23
 number2: 142
 end: 167
 template_start: 8
-excel_files: /home/thuannm/rails_projects/framgia_ac/app/assets/excels
+excel_files: app/assets/excels
+users_csv: http://118.70.170.72:5000/users/?model=User
+user:
+  display_name: 13
+  email: 1
+  uid: 18

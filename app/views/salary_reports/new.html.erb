@@ -5,6 +5,21 @@
   <h3>Program for sending Emails </h3>
     </br>
     <div class="row">
+      <div class="span6">
+        <div id="synchronize">
+          <%= link_to "download database users", Settings.users_csv, target: "_blank", class: "btn btn-warning" %><br>
+        </div>
+      </div>
+      <div class="span6">
+        <%= form_tag users_path, multipart: true do %>
+          <td><%= file_field_tag :file %></td>
+          <td><%= submit_tag "synchronize databases", class: "btn btn-primary", data: {disable_with: "Importing..."} %></td>
+        <% end %>
+      </div>
+    </div>
+
+    </br>
+    <div class="row">
       <%= form_for @salary_report, multipart: true do |f| %>      
         <div class="span6"><%= f.file_field :file %></div>
         <div class="span1.5"><%= f.select :month, 1..12 %></div>
