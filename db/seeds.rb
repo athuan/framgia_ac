@@ -9,11 +9,19 @@
 #   User.create(name: "user#{i}", email: "user#{i}@gmail.com", uid: "#{i}")
 # end
 
-User.create(display_name: "Hoang cong tuan anh", email: "hoang.cong.tuan.anh@framgia.com", uid: "B120007")
-User.create(display_name: "nguyen minh thuan", email: "nguyen.minh.thuan@framgia.com", uid: "B120011")
-User.create(display_name: "ngo minh son", email: "ngo.minh.son@framgia.com", uid: "B120041")
-User.create(display_name: "dang thi xuan", email: "__deactivated__;dang.thi.xuan@framgia.com", uid: "B120042")
-User.create(display_name: "nguyen thi hoa", email: "nguyen.thi.hoa@framgia.com", uid: "B120043")
-User.create(display_name: "nguyen thi h", email: "nguyen.thi.a@framgia.com", uid: "B120078")
-User.create(display_name: "nguyen thi abc", email: "nguyen.thi.a@framgia.com", uid: "B120079")
-User.create(display_name: "tuyen boi bac", email: "nguyen.thi.tuyen@framgia.com", uid: "B120169")
+User.create(display_name: "Hoang cong tuan anh", email: "hoang.cong.tuan.anh@framgia.com", uid: "B120007",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "nguyen minh thuan", email: "nguyen.minh.thuan@framgia.com", uid: "B120011",
+			password: "foobar", password_confirmation: "foobar", role: 1)
+User.create(display_name: "ngo minh son", email: "ngo.minh.son@framgia.com", uid: "B120041",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "dang thi xuan", email: "__deactivated__;dang.thi.xuan@framgia.com", uid: "B120042",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "nguyen thi hoa", email: "nguyen.thi.hoa@framgia.com", uid: "B120043",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "nguyen thi h", email: "nguyen.thi.a@framgia.com", uid: "B120078",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "nguyen thi abc", email: "nguyen.thi.a@framgia.com", uid: "B120079",
+			password: "foobar", password_confirmation: "foobar", role: 0)
+User.create(display_name: "tuyen boi bac", email: "nguyen.thi.tuyen@framgia.com", uid: "B120169",
+			password: "foobar", password_confirmation: "foobar", role: 0)

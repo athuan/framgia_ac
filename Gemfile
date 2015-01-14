@@ -7,6 +7,7 @@ gem "mail"
 gem 'delayed_job_active_record'
 gem "bootstrap-sass", "2.3.2.0"
 gem "bootstrap-will_paginate", "0.0.9"
+gem "bcrypt-ruby", "3.1.2"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.2'

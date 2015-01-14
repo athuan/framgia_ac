@@ -1,12 +1,20 @@
 <header class="navbar navbar-fixed-top navbar-inverse">
   <div class="navbar-inner">
     <div class="container">
-      <%= link_to "Import", root_path, id: "logo" %>
-      <nav>
-        <ul class="nav pull-right">
-          <li><%= link_to "Home", root_path %></li>
-        </ul>
-      </nav>
+      <% if logged_in? %>
+        <%= link_to "Import", root_path, id: "logo" %>
+        <nav>
+          <ul class="nav pull-right">
+            <li><%= link_to "Home", root_path %></li>
+            <% if admin_user? current_user %>
+              <li><%= link_to "Settings", "#" %></li>
+            <% end %>
+            <li>
+              <%= link_to "Log out", logout_path, method: "delete" %>
+            </li>
+          </ul>
+        </nav>
+      <% end %>
     </div>
   </div>
 </header>

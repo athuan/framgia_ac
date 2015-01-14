@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140818013539) do
+ActiveRecord::Schema.define(version: 20150120080907) do
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0
@@ -50,12 +50,29 @@ ActiveRecord::Schema.define(version: 20140818013539) do
     t.datetime "updated_at"
   end
 
+  create_table "templates", force: true do |t|
+    t.string   "name"
+    t.string   "attachment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "template_type"
+  end
+
   create_table "users", force: true do |t|
     t.string   "display_name"
     t.string   "email"
     t.string   "uid"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "role"
+    t.string   "remember_token"
+    t.string   "password_digest"
+    t.string   "remember_digest"
+    t.string   "reset_digest"
+    t.datetime "reset_sent_at"
   end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
